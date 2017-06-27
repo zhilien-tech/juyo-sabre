@@ -14,14 +14,18 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Sabre API Code Samples</name>
+	<properties>
+		<!-- 私服仓库地址  -->
+		<nexusRepositories>http://123.57.46.249:8081/nexus/content/repositories</nexusRepositories>
+	</properties>
 	<modules>
-		<module>workflow</module>
 		<module>configuration</module>
-		<module>soap</module>
-		<module>flowtrigger</module>
 		<module>contract</module>
 		<module>errorhandler</module>
+		<module>workflow</module>
+		<module>soap</module>
 		<module>rest</module>
+		<module>flowtrigger</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
@@ -88,4 +92,18 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<!--项目分发信息，在执行mvn deploy后表示要发布的位置。有了这些信息就可以把网站部署到远程服务器或者把构件部署到远程仓库。 -->
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Internal Releases</name>
+			<url>${nexusRepositories}/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Nexus Snapshot Repository</name>
+			<url>${nexusRepositories}/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
