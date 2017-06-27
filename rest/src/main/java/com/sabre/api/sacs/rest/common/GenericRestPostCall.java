@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -57,10 +59,13 @@ public class GenericRestPostCall<RQ> {
 		restTemplate.setInterceptors(ris);
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		System.out.println("token:" + tokenHolder.getTokenString());
-		headers.add("Authorization", "Bearer " + tokenHolder.getTokenString());
+
+		MediaType contentType = MediaType.parseMediaType("application/json; charset=UTF-8");
+		headers.setContentType(contentType);
 		headers.add("Accept", "*/*");
+		//添加授权信息
+		headers.add("Authorization", "Bearer " + tokenHolder.getTokenString());
+		System.out.println("token:" + tokenHolder.getTokenString());
 
 		HttpEntity<RQ> requestEntity = new HttpEntity<>(request, headers);
 
@@ -70,15 +75,12 @@ public class GenericRestPostCall<RQ> {
 		restTemplate.setMessageConverters(messageConverters);
 		RS callResult = null;
 		try {
-			callResult = cls.newInstance();
-		} catch (InstantiationException e) {
-			LOG.catching(e);
-		} catch (IllegalAccessException e) {
-			LOG.catching(e);
-		}
-		try {
-			callResult = restTemplate.postForObject(url, requestEntity, cls);
+			ResponseEntity<Object> exchange = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Object.class);
+			System.out.println("exchange:" + exchange.toString());
+			ResponseEntity<RS> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, cls);
+			callResult = response.getBody();
 		} catch (HttpClientErrorException e) {
+			e.printStackTrace();
 			if (e.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
 				tokenHolder.setInvalid(true);
 				context.setFaulty(true);

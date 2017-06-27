@@ -52,9 +52,6 @@ public class BargainFinderMaxSoapActivity implements Activity {
 	private GenericRequestWrapper<OTAAirLowFareSearchRQ, OTAAirLowFareSearchRS> bfm;
 
 	@Autowired
-	private PassengerDetailsNameOnlyActivity next;
-
-	@Autowired
 	private ErrorHandlingSchedule errorHandler;
 
 	@Autowired
@@ -79,7 +76,9 @@ public class BargainFinderMaxSoapActivity implements Activity {
 				request = getRequestBody();
 			}
 			bfm.setRequest(request);
-			bfm.setLastInFlow(false);
+
+			//工作流只调用bfm
+			bfm.setLastInFlow(true);
 			marsh.marshal(request, sw);
 			context.putResult("BargainFinderMaxRQ", sw.toString());
 			OTAAirLowFareSearchRS result = bfm.executeRequest(context);
@@ -101,7 +100,7 @@ public class BargainFinderMaxSoapActivity implements Activity {
 			LOG.catching(e);
 		}
 
-		return next;
+		return null;
 	}
 
 	private OTAAirLowFareSearchRQ getRequestBody() {
@@ -131,11 +130,15 @@ public class BargainFinderMaxSoapActivity implements Activity {
 		odi.setDepartureDateTime(sdf.format(cal.getTime()));
 
 		OriginLocation ol = new OriginLocation();
-		ol.setLocationCode("JFK");
+		//		ol.setLocationCode("JFK");
+		//		ol.setLocationCode("BNE");
+		ol.setLocationCode("PEK");
 		odi.setOriginLocation(ol);
 
 		DestinationLocation dl = new DestinationLocation();
-		dl.setLocationCode("LAX");
+		//		dl.setLocationCode("LAX");
+		//		dl.setLocationCode("CNS");
+		dl.setLocationCode("SYD");
 		odi.setDestinationLocation(dl);
 		com.sabre.api.sacs.contract.bargainfindermax.OTAAirLowFareSearchRQ.OriginDestinationInformation.TPAExtensions odiTpa = new com.sabre.api.sacs.contract.bargainfindermax.OTAAirLowFareSearchRQ.OriginDestinationInformation.TPAExtensions();
 		SegmentType segType = new SegmentType();

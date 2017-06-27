@@ -22,7 +22,6 @@ public class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
 			throws IOException {
 
 		ClientHttpResponse response = execution.execute(request, body);
-
 		log(request, body, response);
 
 		return response;

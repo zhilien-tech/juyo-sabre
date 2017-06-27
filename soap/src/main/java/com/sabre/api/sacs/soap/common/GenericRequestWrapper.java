@@ -28,6 +28,7 @@ import com.sabre.api.sacs.soap.interceptor.SessionPoolInterceptor;
 import com.sabre.api.sacs.workflow.SharedContext;
 
 /**
+ * 所有SOAP调用的抽象
  * The class to be implemented to create a SOAP call.
  * @param <RQ> Request class
  * @param <RS> Response class
@@ -145,10 +146,12 @@ public abstract class GenericRequestWrapper<RQ, RS> extends WebServiceGatewaySup
 		public void run() {
 			RS result = null;
 			if (lastInFlow) {
+				//如果是最后一个调用，则添加session-pool拦截器，用于将session还回池中
 				List<ClientInterceptor> interceptors = new ArrayList<>();
 				interceptors.addAll(Arrays.asList(getInterceptors()));
 				interceptors.add(sessionPoolInterceptor);
 				//toArray调用的时候，如果数组长度不够，会自动扩展
+				//设置soap调用拦截器栈
 				setInterceptors(interceptors.toArray(new ClientInterceptor[0]));
 			}
 			callback().setWorkflowContext(workflowContext);
