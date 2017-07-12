@@ -7,7 +7,6 @@ import org.nutz.json.JsonFormat;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +24,6 @@ import com.sabre.api.sacs.workflow.Workflow;
  * 扫描这个类的所在包，将符合要求的类实例放入spring的ioc容器
  */
 @Configuration
-@SpringBootApplication
 @Import({ ConfigurationConfig.class })
 @ComponentScan
 public class RestApplicationConfiguration {
