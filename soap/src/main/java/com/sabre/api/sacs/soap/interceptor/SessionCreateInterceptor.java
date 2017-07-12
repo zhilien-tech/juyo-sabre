@@ -25,47 +25,51 @@ import com.sabre.api.sacs.soap.pool.SessionPool;
 @Scope("prototype")
 public class SessionCreateInterceptor extends AbstractSessionInterceptor {
 
-    private static final Logger LOGGER = LogManager.getLogger(SessionCreateInterceptor.class);
+	private static final Logger LOGGER = LogManager.getLogger(SessionCreateInterceptor.class);
 
-    @Autowired
-    SessionPool sessionPool;
+	@Autowired
+	SessionPool sessionPool;
 
-    @Override
-    public boolean handleRequest(MessageContext messageContext) throws WebServiceClientException {
-        return true;
-    }
+	@Override
+	public boolean handleRequest(MessageContext messageContext) throws WebServiceClientException {
+		return true;
+	}
 
-    @SuppressWarnings("serial")
-    @Override
-    public boolean handleResponse(MessageContext messageContext) throws WebServiceClientException {
+	/**
+	 * 从服务器端的响应中获取session信息，并且放到session池中
+	 */
+	@SuppressWarnings("serial")
+	@Override
+	public boolean handleResponse(MessageContext messageContext) throws WebServiceClientException {
 
-        String token = null;
-        String conversationId = null;
-        Security security = null;
-        try {
-            security = extractSecurityFromMessageContext(messageContext);
-            MessageHeader header = extractMessageHeaderFromMessageContext(messageContext);
+		String token = null;
+		String conversationId = null;
+		Security security = null;
+		try {
+			security = extractSecurityFromMessageContext(messageContext);
+			MessageHeader header = extractMessageHeaderFromMessageContext(messageContext);
 
-            if (!header.getAction().equalsIgnoreCase("SessionCreateRS")) {
-                throw new UnsupportedOperationException("This interceptors works with SessionCreateRQ only");
-            }
-            token = security.getBinarySecurityToken();
-            conversationId = header.getConversationId();
+			if (!header.getAction().equalsIgnoreCase("SessionCreateRS")) {
+				throw new UnsupportedOperationException("This interceptors works with SessionCreateRQ only");
+			}
+			token = security.getBinarySecurityToken();
+			conversationId = header.getConversationId();
 
-        } catch (JAXBException | NullPointerException e) {
-            LOGGER.fatal("Error occurred during retrieving session token", e);
-        }
+		} catch (JAXBException | NullPointerException e) {
+			LOGGER.fatal("Error occurred during retrieving session token", e);
+		}
 
-        LOGGER.info("Creating session object for ConversationID: " + conversationId);
+		LOGGER.info("Creating session object for ConversationID: " + conversationId);
 
-        if (token == null | conversationId == null) {
-            throw new WebServiceClientException("Couldn't retrieve session token from message") {
-            };
-        }
+		if (token == null | conversationId == null) {
+			throw new WebServiceClientException("Couldn't retrieve session token from message") {
+			};
+		}
 
-        logTokenAndConversationIdFromMessage(token, conversationId);
+		logTokenAndConversationIdFromMessage(token, conversationId);
 
-        sessionPool.addToPool(security);
-        return true;
-    }
+		//将session信息添加到池中
+		sessionPool.addToPool(security);
+		return true;
+	}
 }

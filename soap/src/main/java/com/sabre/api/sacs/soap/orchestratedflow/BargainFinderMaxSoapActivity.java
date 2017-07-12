@@ -78,7 +78,7 @@ public class BargainFinderMaxSoapActivity implements Activity {
 			bfm.setRequest(request);
 
 			//工作流只调用bfm
-			bfm.setLastInFlow(true);
+			bfm.setLastInFlow(false);
 			marsh.marshal(request, sw);
 			context.putResult("BargainFinderMaxRQ", sw.toString());
 			OTAAirLowFareSearchRS result = bfm.executeRequest(context);
@@ -179,7 +179,6 @@ public class BargainFinderMaxSoapActivity implements Activity {
 
 		rq.setTPAExtensions(tpa);
 		rq.setVersion(config.getSoapProperty("BargainFinderMaxRQVersion"));
-
 		return rq;
 	}
 

@@ -114,7 +114,9 @@ public abstract class GenericRequestWrapper<RQ, RS> extends WebServiceGatewaySup
 		this.setInterceptors(interceptors.toArray(new ClientInterceptor[0]));
 
 		//设置请求地址(gateway)
-		this.setDefaultUri(configuration.getSoapProperty("environment"));
+		String environment = configuration.getSoapProperty("environment");
+		LOG.info("environment:" + environment);
+		this.setDefaultUri(environment);
 
 		//设置用于xml<->bean的解析和反解析类
 		this.setMarshaller(marshaller());
@@ -144,6 +146,7 @@ public abstract class GenericRequestWrapper<RQ, RS> extends WebServiceGatewaySup
 		@SuppressWarnings("unchecked")
 		@Override
 		public void run() {
+			LOG.info("是否最后一个调用:" + lastInFlow);
 			RS result = null;
 			if (lastInFlow) {
 				//如果是最后一个调用，则添加session-pool拦截器，用于将session还回池中

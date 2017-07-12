@@ -71,7 +71,8 @@ public class SessionCreateWrapper extends WebServiceGatewaySupport {
 
 		SessionCreateRQ.POS pos = new SessionCreateRQ.POS();
 		SessionCreateRQ.POS.Source source = new SessionCreateRQ.POS.Source();
-		source.setPseudoCityCode(configuration.getSoapProperty("pcc"));
+		//PCC
+		source.setPseudoCityCode(configuration.getSoapProperty("group"));
 		pos.setSource(source);
 		requestBody.setPOS(pos);
 
@@ -91,12 +92,14 @@ public class SessionCreateWrapper extends WebServiceGatewaySupport {
 			//获取session
 			result = getWebServiceTemplate().marshalSendAndReceive(getRequestBody(), sessionCreateHeaderCallback);
 		} catch (SoapFaultClientException e) {
+			e.printStackTrace();
 			isFault = true;
 			workflowContext.setFaulty(true);
 		}
 		if (!isFault) {
 			LOGGER.info("Session successfully opened for ConversationID " + workflowContext.getConversationId());
 		} else {
+			LOGGER.error("open session fail " + workflowContext.getConversationId());
 			return null;
 		}
 

@@ -37,8 +37,10 @@ public class SessionPool {
 
 	private int maxSize;
 
+	/**用于标记哪些conversation占用着session*/
 	private Map<String, Security> busy;
 
+	/**用队列保存可用的session*/
 	private BlockingQueue<Security> available;
 
 	@Autowired
@@ -94,10 +96,10 @@ public class SessionPool {
 			LOG.info("Did not find a session for the conversationID: " + context.getConversationId());
 			try {
 				// wait for an available session
-				LOG.info("Waiting for available session for ConversationID:" + context.getConversationId());
+				LOG.info("等待可用session for ConversationID:" + context.getConversationId());
 				result = available.take();
 				busy.put(context.getConversationId(), result);
-				LOG.info("Took for ConversationID:" + context.getConversationId());
+				LOG.info("获取到可用session for ConversationID:" + context.getConversationId());
 			} catch (InterruptedException e) {
 				LOG.catching(e);
 			}
@@ -160,8 +162,9 @@ public class SessionPool {
 	/**
 	 * Refreshes all available session at a fixed time rate.
 	 */
-	@Scheduled(fixedRate = 1000 * 60 * 10)
+	@Scheduled(fixedRate = 1000 * 60 * 1)
 	private void refreshAll() {
+		LOG.info("刷新session pool");
 		List<Security> toRefresh = new ArrayList<>();
 		available.drainTo(toRefresh);
 		for (Security session : toRefresh) {

@@ -17,7 +17,7 @@ import com.sabre.api.sacs.contract.soap.Security;
 import com.sabre.api.sacs.workflow.SharedContext;
 
 /**
- * SpringWS callback used for adding credentials to the call, that creates a session.
+ * SpringWS callback used for adding credentials to the call, that creates a session(@see SessionCreateWrapper).
  * springWS 回调 用于给创建session的调用添加授权信息
  */
 @Controller
@@ -49,9 +49,9 @@ public class SessionCreateHeaderCallback implements HeaderCallback {
 
 		SoapHeader soapHeaderElement = ((SoapMessage) webServiceMessage).getSoapHeader();
 
-		//添加请求头
+		//marshal请求头
 		marshaller.marshal(header, soapHeaderElement.getResult());
-		//添加授权信息
+		//marshal授权信息
 		marshaller.marshal(security, soapHeaderElement.getResult());
 
 	}

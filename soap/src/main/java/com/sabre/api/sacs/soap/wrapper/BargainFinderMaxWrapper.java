@@ -19,27 +19,25 @@ import com.sabre.api.sacs.soap.common.GenericRequestWrapper;
 @Scope("prototype")
 public class BargainFinderMaxWrapper extends GenericRequestWrapper<OTAAirLowFareSearchRQ, OTAAirLowFareSearchRS> {
 
-    @Autowired
-    @Qualifier("bargainFinderMaxHeaderComposingCallback")
-    private HeaderComposingCallback headerCallback;
+	@Autowired
+	@Qualifier("bargainFinderMaxHeaderComposingCallback")
+	private HeaderComposingCallback headerCallback;
 
+	@Override
+	protected List<ClientInterceptor> interceptors() {
+		return null;
+	}
 
+	@Override
+	protected Jaxb2Marshaller marshaller() {
+		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+		marshaller.setContextPath("com.sabre.api.sacs.contract.bargainfindermax");
+		return marshaller;
+	}
 
-    @Override
-    protected List<ClientInterceptor> interceptors() {
-        return null;
-    }
-
-    @Override
-    protected Jaxb2Marshaller marshaller() {
-        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-        marshaller.setContextPath("com.sabre.api.sacs.contract.bargainfindermax");
-        return marshaller;
-    }
-
-    @Override
-    protected HeaderCallback callback() {
-        return headerCallback;
-    }
+	@Override
+	protected HeaderCallback callback() {
+		return headerCallback;
+	}
 
 }

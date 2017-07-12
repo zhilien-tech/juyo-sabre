@@ -1,0 +1,136 @@
+{
+  "OTA_AirLowFareSearchRQ" : {
+    "DirectFlightsOnly" : false,
+    "AvailableFlightsOnly" : false,
+    "Version" : "3.1.0",
+    "POS" : {
+      "Source" : [ {
+        "PseudoCityCode" : "PCC",
+        "RequestorID" : {
+          "Type" : "1",
+          "ID" : "1",
+          "CompanyName" : {
+            "Code" : "TN",
+            "content" : "TN"
+          }
+        }
+      } ]
+    },
+    "OriginDestinationInformation" : [ {
+      "RPH" : "1",
+      "DepartureDateTime" : "2016-04-09T00:00:00",
+      "OriginLocation" : {
+        "LocationCode" : "TPE"
+      },
+      "DestinationLocation" : {
+        "LocationCode" : "HKG"
+      },
+      "TPA_Extensions" : {
+        "SegmentType" : {
+          "Code" : "X"
+        },
+        "IncludeVendorPref" : [ {
+          "Code" : "CX"
+        } ]
+      }
+    }, {
+      "RPH" : "2",
+      "DepartureDateTime" : "2016-08-09T00:00:00",
+      "OriginLocation" : {
+        "LocationCode" : "HKG"
+      },
+      "DestinationLocation" : {
+        "LocationCode" : "EWR"
+      },
+      "TPA_Extensions" : {
+        "SegmentType" : {
+          "Code" : "O"
+        },
+        "IncludeVendorPref" : [ {
+          "Code" : "CX"
+        } ]
+      }
+    }, {
+      "RPH" : "3",
+      "DepartureDateTime" : "2016-08-14T00:00:00",
+      "OriginLocation" : {
+        "LocationCode" : "EWR"
+      },
+      "DestinationLocation" : {
+        "LocationCode" : "HKG"
+      },
+      "TPA_Extensions" : {
+        "SegmentType" : {
+          "Code" : "X"
+        },
+        "IncludeVendorPref" : [ {
+          "Code" : "CX"
+        } ]
+      }
+    }, {
+      "RPH" : "4",
+      "DepartureDateTime" : "2016-08-14T00:00:00",
+      "OriginLocation" : {
+        "LocationCode" : "HKG"
+      },
+      "DestinationLocation" : {
+        "LocationCode" : "TPE"
+      },
+      "TPA_Extensions" : {
+        "SegmentType" : {
+          "Code" : "O"
+        },
+        "IncludeVendorPref" : [ {
+          "Code" : "CX"
+        } ]
+      }
+    } ],
+    "TravelPreferences" : {
+      "ETicketDesired" : false,
+      "ValidInterlineTicket" : false,
+      "SmokingAllowed" : false,
+      "CabinPref" : [ {
+        "Cabin" : "Y",
+        "PreferLevel" : "Only"
+      } ],
+      "TPA_Extensions" : {
+        "XOFares" : {
+          "Value" : true
+        }
+      }
+    },
+    "TravelerInfoSummary" : {
+      "SpecificPTC_Indicator" : true,
+      "SeatsRequested" : [ 2 ],
+      "AirTravelerAvail" : [ {
+        "PassengerTypeQuantity" : [ {
+          "Code" : "ADT",
+          "Quantity" : 1
+        }, {
+          "Code" : "CNN",
+          "Quantity" : 1
+        }, {
+          "Code" : "INF",
+          "Quantity" : 1
+        } ]
+      } ],
+      "PriceRequestInformation" : {
+        "TPA_Extensions" : {
+          "PointOfSaleOverride" : {
+            "Code" : "TPE"
+          }
+        }
+      }
+    },
+    "TPA_Extensions" : {
+      "IntelliSellTransaction" : {
+        "RequestType" : {
+          "Name" : "100ITINS"
+        },
+        "CompressResponse" : {
+          "Value" : true
+        }
+      }
+    }
+  }
+}
