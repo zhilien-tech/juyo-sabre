@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -75,16 +73,20 @@ public class GenericRestPostCall<RQ> {
 		restTemplate.setMessageConverters(messageConverters);
 		RS callResult = null;
 		try {
-			ResponseEntity<Object> exchange = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Object.class);
-			System.out.println("exchange:" + exchange.toString());
-			ResponseEntity<RS> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, cls);
-			callResult = response.getBody();
+			callResult = cls.newInstance();
+		} catch (InstantiationException e) {
+			LOG.catching(e);
+		} catch (IllegalAccessException e) {
+			LOG.catching(e);
+		}
+		try {
+			callResult = restTemplate.postForObject(url, requestEntity, cls);
 		} catch (HttpClientErrorException e) {
-			e.printStackTrace();
 			if (e.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
 				tokenHolder.setInvalid(true);
 				context.setFaulty(true);
 			}
+			e.printStackTrace();
 		}
 		return callResult;
 	}

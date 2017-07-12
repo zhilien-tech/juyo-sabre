@@ -10,11 +10,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import com.sabre.api.sacs.configuration.ConfigurationConfig;
 import com.sabre.api.sacs.rest.activities.BargainFinderMaxActivity;
 import com.sabre.api.sacs.rest.activities.LeadPriceCalendarActivity;
-import com.sabre.api.sacs.rest.domain.generated.BfmV310Response;
 import com.sabre.api.sacs.rest.domain.leadpricecalendar.LeadPriceCalendarResponse;
 import com.sabre.api.sacs.workflow.SharedContext;
 import com.sabre.api.sacs.workflow.Workflow;
@@ -23,7 +24,9 @@ import com.sabre.api.sacs.workflow.Workflow;
  * Module configuration an main class for running test flow.
  * 扫描这个类的所在包，将符合要求的类实例放入spring的ioc容器
  */
+@Configuration
 @SpringBootApplication
+@Import({ ConfigurationConfig.class })
 @ComponentScan
 public class RestApplicationConfiguration {
 
@@ -42,9 +45,9 @@ public class RestApplicationConfiguration {
 	public static void bargainFinderMax(ApplicationContext ctx) {
 		Workflow workflow = new Workflow(ctx.getBean(BargainFinderMaxActivity.class));
 		SharedContext sCtx = workflow.run();
-		BfmV310Response bfmresp = (BfmV310Response) sCtx.getResult("BargainFinderMaxResponse");
-		String result = Json.toJson(bfmresp, JsonFormat.compact());
-		log.info("result:" + result);
+		//		BfmV310Response bfmresp = (BfmV310Response) sCtx.getResult("BargainFinderMaxResponse");
+		//		String result = Json.toJson(bfmresp, JsonFormat.compact());
+		//		log.info("result:" + result);
 		LOG.debug(sCtx);
 	}
 

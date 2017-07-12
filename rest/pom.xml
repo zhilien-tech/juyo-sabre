@@ -56,30 +56,39 @@
 				<artifactId>jsonschema2pojo-maven-plugin</artifactId>
 				<version>0.4.14</version>
 				<configuration>
+					<sourceType>json</sourceType>
 					<sourceDirectory>${basedir}/src/main/resources/schema</sourceDirectory>
 <!-- 					<sourcePaths> -->
 <!-- 						<sourcePath>src/main/resources/schema/bfm_v186_response</sourcePath> -->
 <!-- 					</sourcePaths> -->
+					<!--  
 					<sourceType>json</sourceType>
-					<targetPackage>com.sabre.api.sacs.rest.domain.generated</targetPackage>
-					<generateBuilders>true</generateBuilders>
+					-->
+					
+                    <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
+                    <outputDirectory>${project.build.directory}/generated-sources/java</outputDirectory>
+                    <targetPackage>com.sabre.api.sacs.rest.domain.bargainfindermax.rq</targetPackage>
+                    <annotationStyle>jackson2</annotationStyle>
+                    <generateBuilders>true</generateBuilders>
+                    <initializeCollections>true</initializeCollections>
 				</configuration>
 				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
+					 <execution>
+                        <id>generate-rest</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
 				</executions>
 			</plugin>
-			        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-                <source>1.7</source>
-                <target>1.7</target>
-            </configuration>
-        </plugin>
+			<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-compiler-plugin</artifactId>
+	            <configuration>
+	                <source>1.7</source>
+	                <target>1.7</target>
+	            </configuration>
+	        </plugin>
 		</plugins>
 	</build>
 </project>

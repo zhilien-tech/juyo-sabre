@@ -3,6 +3,8 @@ package com.sabre.api.sacs.rest.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +31,8 @@ import com.sabre.api.sacs.rest.interceptor.LoggingRequestInterceptor;
 @Controller
 public class AuthenticationCall {
 
+	private static final Log log = Logs.get();
+
 	@Autowired
 	private SacsConfiguration config;
 
@@ -47,10 +51,12 @@ public class AuthenticationCall {
 
 		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 		map.add("grant_type", "client_credentials");
+		String clientCredential = credentialsBuilder.getCredentialsString();
+		log.info("ClientCredential :" + clientCredential);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		headers.add("Authorization", "Basic " + credentialsBuilder.getCredentialsString());
+		headers.add("Authorization", "Basic " + clientCredential);
 		headers.add("Accept", "*/*");
 
 		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(map, headers);
